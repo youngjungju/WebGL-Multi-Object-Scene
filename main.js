@@ -108,8 +108,14 @@ function loadShader(gl, type, source) {
 
 // Initialize buffers for multiple objects
 function initBuffers() {
-    // Cube
+	
+	// Jack in a Box
+	// Cube
     buffers.cube = initCubeBuffer();
+	// Crank
+	buffers.crank = initCrankBuffer();
+	// Panel
+	buffers.panel = initPanelBuffer();
 
     // Pyramid
     buffers.pyramid = initPyramidBuffer();
@@ -136,12 +142,6 @@ function initCubeBuffer() {
          0.5,  0.5, -0.5,
          0.5, -0.5, -0.5,
 
-        // Top face
-        -0.5,  0.5, -0.5,
-        -0.5,  0.5,  0.5,
-         0.5,  0.5,  0.5,
-         0.5,  0.5, -0.5,
-
         // Bottom face
         -0.5, -0.5, -0.5,
          0.5, -0.5, -0.5,
@@ -159,15 +159,28 @@ function initCubeBuffer() {
         -0.5, -0.5,  0.5,
         -0.5,  0.5,  0.5,
         -0.5,  0.5, -0.5,
+		
+        // Top face
+        -0.5,  0.5, -0.5, // 20
+        -0.5,  0.5,  0.5, // 21
+         0.5,  0.5,  0.5, // 22
+         0.5,  0.5, -0.5, // 23
+		-0.3,  0.5,  0.3, // 24
+		-0.3,  0.5, -0.3, // 25
+         0.3,  0.5,  0.3, // 26
+         0.3,  0.5, -0.3, // 27
     ];
 
     const colors = [
         [1.0, 0.0, 0.0, 1.0], // Front - Red
         [0.0, 1.0, 0.0, 1.0], // Back - Green
-        [0.0, 0.0, 1.0, 1.0], // Top - Blue
         [1.0, 1.0, 0.0, 1.0], // Bottom - Yellow
         [1.0, 0.0, 1.0, 1.0], // Right - Magenta
         [0.0, 1.0, 1.0, 1.0], // Left - Cyan
+		[0.0, 0.0, 1.0, 1.0], // Top - Blue
+		[0.0, 0.0, 1.0, 1.0], // Top - Blue
+		[0.0, 0.0, 1.0, 1.0], // Top - Blue
+		[0.0, 0.0, 1.0, 1.0], // Top - Blue
     ];
 
     let faceColors = [];
@@ -178,10 +191,202 @@ function initCubeBuffer() {
     const indices = [
         0,  1,  2,    0,  2,  3,  // front
         4,  5,  6,    4,  6,  7,  // back
+        8,  9,  10,   8,  10, 11, // bottom
+        12, 13, 14,   12, 14, 15, // right
+        16, 17, 18,   16, 18, 19, // left
+        20, 21, 24,   20, 24, 25, // top
+		21, 22, 26,   21, 24, 26, // top
+		22, 23, 27,   22, 27, 26, // top
+		23, 20, 25,   23, 25, 27, // top
+    ];
+
+    return {
+        position: createBuffer(positions),
+        color: createBuffer(faceColors),
+        indices: createIndexBuffer(indices),
+        vertexCount: indices.length,
+    };
+}
+
+// Create jackInABox buffer
+function initCrankBuffer() {
+    const positions = [
+		// Axel
+		// Left face
+		0.5, -0.06, -0.06,
+		0.5,  0.06, -0.06,
+		0.5,  0.06,  0.06,
+		0.5, -0.06,  0.06,
+		
+		// Bottom face
+		0.5, -0.06, -0.06,
+		0.5,  0.06, -0.06,
+		0.65, 0.06, -0.06,
+		0.65,-0.06, -0.06,
+		
+		// Front face
+		0.5,  -0.06, -0.06,
+		0.65, -0.06, -0.06,
+		0.65, -0.06,  0.06,
+		0.5,  -0.06,  0.06,
+		
+		// Top face
+		0.65, -0.06, 0.06,
+		0.65,  0.06, 0.06,
+		0.5,   0.06,  0.06,
+		0.5,  -0.06,  0.06,
+		
+		// Back face
+		0.65, 0.06, -0.06,
+		0.5,  0.06, -0.06,
+		0.5,  0.06,  0.06,
+		0.65, 0.06,  0.06,
+		
+		// Handle
+		// Left face
+		0.65, -0.12, -0.12,
+		0.65,  0.12, -0.12,
+		0.65,  0.12,  0.4,
+		0.65, -0.12,  0.4,
+		
+		// Bottom face
+		0.65, -0.12, -0.12,
+		0.7,  -0.12, -0.12,
+		0.7,  -0.12,  0.4,
+		0.65, -0.12,  0.4,
+		
+		// Front face
+		0.7,  -0.12, 0.4,
+		0.7,   0.12, 0.4,
+		0.65,  0.12, 0.4,
+		0.65, -0.12, 0.4,
+		
+		// Top face
+		0.7,  0.12, -0.12,
+		0.65, 0.12, -0.12,
+		0.65, 0.12,  0.4,
+		0.7,  0.12,  0.4,
+		
+		// Back face
+		0.65, -0.12, -0.12,
+		0.65,  0.12, -0.12,
+		0.7,   0.12, -0.12,
+		0.7,  -0.12, -0.12,
+		
+		// Right face
+		0.7, -0.12, -0.12,
+		0.7,  0.12, -0.12,
+		0.7,  0.12,  0.4,
+		0.7, -0.12,  0.4,
+		
+		// Knob
+		// Right face
+		0.85, -0.06, 0.22,
+		0.85,  0.06, 0.22,
+		0.85,  0.06, 0.34,
+		0.85, -0.06, 0.34,
+		
+		// Bottom face
+		0.7,  -0.06, 0.22,
+		0.7,   0.06, 0.22,
+		0.85,  0.06, 0.22,
+		0.85, -0.06, 0.22,
+		
+		// Front face
+		0.7,  -0.06, 0.22,
+		0.85, -0.06, 0.22,
+		0.85, -0.06, 0.34,
+		0.7,  -0.06, 0.34,
+		
+		// Top face
+		0.85, -0.06, 0.34,
+		0.85,  0.06, 0.34,
+		0.7,   0.06, 0.34,
+		0.7,  -0.06, 0.34,
+		
+		// Back face
+		0.85, 0.06, 0.22,
+		0.7,  0.06, 0.22,
+		0.7,  0.06, 0.34,
+		0.85, 0.06, 0.34,
+    ];
+
+    const colors = [
+		[0.4,  0.4, 0.4, 1.0], // Crank Axel - Gray
+		[0.4,  0.4, 0.4, 1.0], // Crank Axel - Gray
+		[0.4,  0.4, 0.4, 1.0], // Crank Axel - Gray
+		[0.4,  0.4, 0.4, 1.0], // Crank Axel - Gray
+		[0.4,  0.4, 0.4, 1.0], // Crank Axel - Gray
+		[0.5,  0.5, 0.5, 1.0], // Crank Handle - Gray
+		[0.5,  0.5, 0.5, 1.0], // Crank Handle - Gray
+		[0.5,  0.5, 0.5, 1.0], // Crank Handle - Gray
+		[0.5,  0.5, 0.5, 1.0], // Crank Handle - Gray
+		[0.5,  0.5, 0.5, 1.0], // Crank Handle - Gray
+		[0.5,  0.5, 0.5, 1.0], // Crank Handle - Gray
+		[0.75, 0.0, 0.0, 1.0], // Crank Knob - Red
+		[0.75, 0.0, 0.0, 1.0], // Crank Knob - Red
+		[0.75, 0.0, 0.0, 1.0], // Crank Knob - Red
+		[0.75, 0.0, 0.0, 1.0], // Crank Knob - Red
+		[0.75, 0.0, 0.0, 1.0], // Crank Knob - Red
+    ];
+
+    let faceColors = [];
+    for (let i = 0; i < colors.length; i++) {
+        faceColors = faceColors.concat(colors[i], colors[i], colors[i], colors[i]);
+    }
+
+    const indices = [
+		// cube
+        0,  1,  2,    0,  2,  3,  // front
+        4,  5,  6,    4,  6,  7,  // back
         8,  9,  10,   8,  10, 11, // top
         12, 13, 14,   12, 14, 15, // bottom
         16, 17, 18,   16, 18, 19, // right
         20, 21, 22,   20, 22, 23, // left
+		// crank
+		// axel
+		24, 25, 26,   24, 26, 27, // left
+		28, 29, 30,   28, 30, 31, // bottom
+		32, 33, 34,   32, 34, 35, // front
+		36, 37, 38,   36, 38, 39, // top
+		40, 41, 42,   40, 42, 43, // back
+		// handle
+		44, 45, 46,   44, 46, 47, // left
+		48, 49, 50,   48, 50, 51, // bottom
+		52, 53, 54,   52, 54, 55, // front
+		56, 57, 58,   56, 58, 59, // top
+    ];
+
+    return {
+        position: createBuffer(positions),
+        color: createBuffer(faceColors),
+        indices: createIndexBuffer(indices),
+        vertexCount: indices.length,
+    };
+}
+
+// Create panel buffer
+function initPanelBuffer() {
+    const positions = [
+        
+        // Top face
+        -0.3,  0.5, -0.3,
+        -0.3,  0.5,  0.3,
+         0.3,  0.5,  0.3,
+         0.3,  0.5, -0.3,
+    ];
+
+    const colors = [
+        [0.0, 0.0, 1.0, 1.0], // panel
+    ];
+
+    let faceColors = [];
+    for (let i = 0; i < colors.length; i++) {
+        faceColors = faceColors.concat(colors[i], colors[i], colors[i], colors[i]);
+    }
+
+    const indices = [
+        0,  1,  2,    0,  2,  3, // panel
     ];
 
     return {
@@ -430,6 +635,17 @@ function createModelViewMatrix(translateX, translateY, translateZ, rotateX, rota
     return modelViewMatrix;
 }
 
+function modifyModelViewMatrix(modelViewMatrix, translateX, translateY, translateZ, rotateX, rotateY, rotateZ, scaleVal) {
+    // Apply object-specific transformations
+    mat4.translate(modelViewMatrix, modelViewMatrix, [translateX, translateY, translateZ]);
+    mat4.rotateX(modelViewMatrix, modelViewMatrix, rotateX);
+    mat4.rotateY(modelViewMatrix, modelViewMatrix, rotateY);
+    mat4.rotateZ(modelViewMatrix, modelViewMatrix, rotateZ);
+    mat4.scale(modelViewMatrix, modelViewMatrix, [scaleVal, scaleVal, scaleVal]);
+
+    return modelViewMatrix;
+}
+
 // Draw object
 function drawObject(buffer, modelViewMatrix, projectionMatrix) {
     // Position
@@ -512,6 +728,23 @@ function drawScene() {
         0.8
     );
     drawObject(buffers.cube, cubeMatrix, projectionMatrix);
+
+	// Draw rotating crank (animated)
+    const crankMatrix = modifyModelViewMatrix(
+        cubeMatrix,
+		0.0, 0.0, 0.0,
+        animationTime * 5.0, animationTime * 0.0, animationTime * 0.0,
+        1.0
+    );
+    drawObject(buffers.crank, crankMatrix, projectionMatrix);
+	
+	// Draw opening panel (animated) // NOT FUNCTIONAL //
+    const panelMatrix = createModelViewMatrix(
+        -2.0, 1.0, 0.0,
+        animationTime, animationTime * 0.7, 0,
+        0.8
+    );
+    drawObject(buffers.panel, panelMatrix, projectionMatrix);
 
     // Draw pyramid (static)
     const pyramidMatrix = createModelViewMatrix(
